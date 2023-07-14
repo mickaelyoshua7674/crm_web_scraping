@@ -6,6 +6,7 @@ from typing import List
 import pandas as pd
 from os.path import exists
 from threading import Thread
+import sys
 
 CHROMEDRIVER_PATH = "chromedriver.exe"
 COLUMNS = ["crm", "name", "data_inscricao", "prim_inscricao", "inscricao", "situacao", "endereco", "telefone"]
@@ -17,20 +18,17 @@ if not exists("crm_pb_data.csv"):
 # op.add_argument("headless") # don't open a Chrome window
 driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH)#, options=op)
 
-# SELECT UF -> PB / SHOW DATA
-driver.get("https://crmpb.org.br/busca-medicos/")
-random_sleep(3,5)
-fill_form(driver)
-last_page = int([p.get_attribute("data-num") for p in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")][-1])
-driver.quit()
-pages = [p for p in range(1, last_page+1)]
-even_pages = [p for p in pages if p%2==0]
-odd_pages = [p for p in pages if p%2==1]
-
-def main(pages: List[int]):
+def main(pages_type: str):
+    # SELECT UF -> PB / SHOW DATA
+    assert pages_type == "even" or pages_type == "odd", "'pages_type' must be 'even' or 'odd'"
     driver.get("https://crmpb.org.br/busca-medicos/")
     random_sleep(3,5)
     fill_form(driver)
+    last_page = int([p.get_attribute("data-num") for p in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")][-1])
+    if pages_type=="even":
+        pages = [p for p in range(1, last_page+1) if p%2==0]
+    else:
+        pages = [p for p in range(1, last_page+1) if p%2==1]
     for p in pages:
         if p == 1:
             # GET FIRST PAGE DATA AND SAVE
@@ -64,5 +62,5 @@ def main(pages: List[int]):
             random_sleep(1,3)
     driver.quit()
 
-Thread(target=main(odd_pages)).start()
-Thread(target=main(even_pages)).start()
+Thread(target=main("odd")).start()
+Thread(target=main("even")).start()

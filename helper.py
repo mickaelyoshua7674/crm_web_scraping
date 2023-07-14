@@ -26,7 +26,6 @@ def fill_form(driver) -> None:
     driver.find_element(By.TAG_NAME, "body").click()
     random_sleep(1,3)
     driver.find_element(By.CSS_SELECTOR, ".w-100.btn-buscar.btnPesquisar").click()
-    print("Page 1")
     random_sleep(5,7)
     driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
     random_sleep(1,3)
