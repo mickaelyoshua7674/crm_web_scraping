@@ -6,7 +6,6 @@ from typing import List
 import pandas as pd
 from os.path import exists
 from threading import Thread
-import sys
 
 CHROMEDRIVER_PATH = "chromedriver.exe"
 COLUMNS = ["crm", "name", "data_inscricao", "prim_inscricao", "inscricao", "situacao", "endereco", "telefone"]
@@ -16,11 +15,14 @@ if not exists("crm_pb_data.csv"):
 
 # op = webdriver.ChromeOptions()
 # op.add_argument("headless") # don't open a Chrome window
-driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH)#, options=op)
+driver_even = driver_odd = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH)#, options=op)
 
-def main(pages_type: str):
+def main(pages_type: str, driver):
     # SELECT UF -> PB / SHOW DATA
     assert pages_type == "even" or pages_type == "odd", "'pages_type' must be 'even' or 'odd'"
+    # op = webdriver.ChromeOptions()
+    # op.add_argument("headless") # don't open a Chrome window
+    driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH)#, options=op)
     driver.get("https://crmpb.org.br/busca-medicos/")
     random_sleep(3,5)
     fill_form(driver)
@@ -62,5 +64,5 @@ def main(pages_type: str):
             random_sleep(1,3)
     driver.quit()
 
-Thread(target=main("odd")).start()
-Thread(target=main("even")).start()
+Thread(target=main("odd", driver_odd)).start()
+Thread(target=main("even", driver_even)).start()
