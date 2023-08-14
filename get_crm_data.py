@@ -1,6 +1,5 @@
 from helper import *
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from os.path import exists
 import pandas as pd
 import pickle as pk
@@ -26,8 +25,8 @@ fill_form(driver)
 
 # get last page
 last_page = int([p.get_attribute("data-num") for p in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")][-1])
-if last_collected_page > 0:
-    go_to_last_collected_page(driver, last_collected_page+1)
+if 0 < last_collected_page < last_page:
+    go_to_page(driver, last_collected_page+1)
 
 active_page = get_active_page(driver)
 current_page = 0
@@ -47,6 +46,6 @@ while active_page < last_page or loop_count < 10:
     else:
         loop_count += 1
 
-    click_page(driver, active_page+1)
+    go_to_page(driver, active_page+1)
     active_page = get_active_page(driver)
 driver.quit()

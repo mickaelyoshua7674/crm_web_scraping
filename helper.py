@@ -43,22 +43,18 @@ def get_doctors_data(driver) -> List[List[str]]:
             div.find_element(By.CSS_SELECTOR, ".row.telefone").find_element(By.TAG_NAME, "div").text]
             for div in divs_med]
 
-def click_page(driver, page: int) -> None:
-    """Click the given page"""
-    [li for li in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")
-    if li.get_attribute("data-num") == str(page)][0].click()
-    random_sleep(5,8)
-
-def go_to_last_collected_page(driver, last_collected_page: int) -> None:
-    """Go to page given page"""
+def go_to_page(driver, page: int) -> None:
+    """Go to given page"""
     while True:
         random_sleep(3,5)
-        pages_list_obj = [li for li in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")]
         try:
-            pages_list_obj[[li.get_attribute("data-num") for li in pages_list_obj].index(str(last_collected_page))].click()
+            [li for li in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")]\
+                [[li.get_attribute("data-num") for li in [li for li in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages")\
+                                                          .find_elements(By.TAG_NAME, "li")]].index(str(page))].click()
+            random_sleep(1,2)
             break
         except ValueError:
-            pages_list_obj[-3].click()
+            [li for li in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")][-3].click()
     random_sleep(3,5)
 
 def get_active_page(driver) -> int:
