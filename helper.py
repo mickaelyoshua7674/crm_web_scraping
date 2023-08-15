@@ -46,15 +46,15 @@ def get_doctors_data(driver) -> List[List[str]]:
 def go_to_page(driver, page: int) -> None:
     """Go to given page"""
     while True:
+        pages_list = [li for li in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")]
         random_sleep(3,5)
         try:
-            [li for li in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")]\
-                [[li.get_attribute("data-num") for li in [li for li in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages")\
-                                                          .find_elements(By.TAG_NAME, "li")]].index(str(page))].click()
-            random_sleep(1,2)
+            driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
+            pages_list[[li.get_attribute("data-num") for li in pages_list].index(str(page))].click()
             break
         except ValueError:
-            [li for li in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")][-3].click()
+            driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
+            pages_list[-3].click()
     random_sleep(3,5)
 
 def get_active_page(driver) -> int:
