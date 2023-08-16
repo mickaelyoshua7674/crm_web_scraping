@@ -1,5 +1,6 @@
 from helper import *
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from os.path import exists
 import pandas as pd
 import pickle as pk
@@ -18,7 +19,8 @@ if exists("last_collected_page.pkl"):
 
 # op = webdriver.ChromeOptions()
 # op.add_argument("headless") # don't open a Chrome window
-driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH)#, options=op)
+sc = Service(CHROMEDRIVER_PATH)
+driver = webdriver.Chrome(service=sc)#, options=op)
 driver.get("https://crmpb.org.br/busca-medicos/")
 random_sleep(3,5)
 fill_form(driver)
