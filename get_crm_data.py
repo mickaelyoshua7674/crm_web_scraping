@@ -6,7 +6,7 @@ import pandas as pd
 import pickle as pk
 
 CHROMEDRIVER_PATH = "chromedriver.exe"
-COLUMNS = ["crm", "nome", "data_inscricao", "prim_inscricao", "inscricao", "situacao", "endereco", "telefone"]
+COLUMNS = ["nome", "crm", "data_inscricao", "prim_inscricao", "inscricao", "situacao", "endereco", "telefone"]
 
 if not exists("crm_pb_data.csv"): # if file don't exist create an empty csv
     pd.DataFrame(columns=COLUMNS).to_csv("crm_pb_data.csv", header=True, index=False)
