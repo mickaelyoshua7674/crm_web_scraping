@@ -28,7 +28,7 @@ fill_form(driver)
 # get last page
 last_page = int([p.get_attribute("data-num") for p in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")][-1])
 if 0 < last_collected_page < last_page:
-    print("Going to last collected data page...")
+    print("Going to last collected page...")
     go_to_page(driver, last_collected_page+1)
 
 active_page = get_active_page(driver)
