@@ -1,12 +1,10 @@
-from helper import *
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
+from helper import CRM
 from os.path import exists
 import pandas as pd
 import pickle as pk
 
-CHROMEDRIVER_PATH = "chromedriver.exe"
 COLUMNS = ["nome", "crm", "data_inscricao", "prim_inscricao", "inscricao", "situacao", "endereco", "telefone"]
+CHROMEDRIVER_PATH = "chromedriver.exe"
 
 if not exists("crm_pb_data.csv"): # if file don't exist create an empty csv
     pd.DataFrame(columns=COLUMNS).to_csv("crm_pb_data.csv", header=True, index=False)
@@ -17,30 +15,27 @@ if exists("last_collected_page.pkl"):
     with open("last_collected_page.pkl", "rb") as f:
         last_collected_page = pk.load(f)
 
-# op = webdriver.ChromeOptions()
-# op.add_argument("headless") # don't open a Chrome window
-sc = Service(CHROMEDRIVER_PATH)
-driver = webdriver.Chrome(service=sc)#, options=op)
-driver.get("https://crmpb.org.br/busca-medicos/")
-random_sleep(3,5)
-fill_form(driver)
+crm_bot = CRM(CHROMEDRIVER_PATH)
+crm_bot.driver.get("https://crmpb.org.br/busca-medicos/")
+crm_bot.random_sleep(3,5)
+crm_bot.fill_form()
 
+last_page = crm_bot.get_last_page()
 # get last page
-last_page = int([p.get_attribute("data-num") for p in driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")][-1])
 if 0 < last_collected_page < last_page:
     print("Going to last collected page...")
-    go_to_page(driver, last_collected_page+1)
+    crm_bot.go_to_page(last_collected_page+1)
 
-active_page = get_active_page(driver)
+active_page = crm_bot.get_active_page()
 current_page = 0
 loop_count = 0
 while active_page < last_page or loop_count < 10:
-    print_current_hour()
+    crm_bot.print_current_hour()
     print(f"Page {active_page}")
     
     if active_page != current_page: # after clicking to next page, if it is now a different page, then collect data
         print("Getting data...")
-        data = get_doctors_data(driver)
+        data = crm_bot.get_doctors_data()
         print("Data collected.\n")
         pd.DataFrame(data=data, columns=COLUMNS).to_csv("crm_pb_data.csv", header=False, index=False, mode="a")
         current_page = active_page
@@ -49,6 +44,6 @@ while active_page < last_page or loop_count < 10:
     else:
         loop_count += 1
 
-    go_to_page(driver, active_page+1)
-    active_page = get_active_page(driver)
-driver.quit()
+    crm_bot.go_to_page(active_page+1)
+    active_page = crm_bot.get_active_page()
+crm_bot.driver.quit()
