@@ -1,22 +1,13 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from typing import List, Callable
+from typing import List
 import time, random
 from datetime import datetime
 
 class CRM():
-    # def check_unexpected_alert(self, function: Callable) -> Callable:
-    #     def wrapper(*args, **kwargs) -> None:
-    #         try:
-    #             function(*args, **kwargs)
-    #         except UnexpectedAlertPresentException:
-    #             wrapper(*args, **kwargs)
-    #     return wrapper
-
     def __init__(self, chromedriver_path: str) -> None:
         self.CHROMEDRIVER_PATH = chromedriver_path
         self.driver = self.init_driver()

@@ -1,4 +1,4 @@
-from helper import CRM
+from CRM import CRM
 from os.path import exists
 import pandas as pd
 import pickle as pk
