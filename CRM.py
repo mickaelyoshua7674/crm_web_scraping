@@ -1,11 +1,10 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium import webdriver
 from typing import List
 import time, random
-from datetime import datetime
 
 class CRM():
     def __init__(self, chromedriver_path: str) -> None:
@@ -17,10 +16,6 @@ class CRM():
         # op.add_argument("headless") # don't open a Chrome window
         sc = Service(self.CHROMEDRIVER_PATH)
         return webdriver.Chrome(service=sc)#, options=op)
-
-    def print_current_hour(self) -> None:
-        """Print the current hour:min:sec"""
-        print(f"Current time {datetime.now()}")
 
     def random_sleep(self, i: int, f: int) -> None:
         """Randomly choose a float number between i-f and sleep during that random time"""

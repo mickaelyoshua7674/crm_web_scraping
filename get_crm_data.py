@@ -30,7 +30,6 @@ active_page = crm_bot.get_active_page()
 current_page = 0
 loop_count = 0
 while active_page < last_page or loop_count < 10:
-    crm_bot.print_current_hour()
     print(f"Page {active_page}")
     
     if active_page != current_page: # after clicking to next page, if it is now a different page, then collect data
