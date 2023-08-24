@@ -39,7 +39,7 @@ while active_page < last_page or loop_count < 10:
         print("Data collected.\n")
 
         for crm in [d[1] for d in data]:
-            if crm in pd.read_csv(FILE_NAME, header=True)["crm"].unique():
+            if crm in pd.read_csv(FILE_NAME)["crm"].unique():
                 print("Data already collected.")
                 exit()
                 
