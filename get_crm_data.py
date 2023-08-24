@@ -3,11 +3,12 @@ from os.path import exists
 import pandas as pd
 import pickle as pk
 
+FILE_NAME = "crm_pb_data.csv"
 COLUMNS = ["nome", "crm", "data_inscricao", "prim_inscricao", "inscricao", "situacao", "endereco", "telefone"]
 CHROMEDRIVER_PATH = "chromedriver.exe"
 
-if not exists("crm_pb_data.csv"): # if file don't exist create an empty csv
-    pd.DataFrame(columns=COLUMNS).to_csv("crm_pb_data.csv", header=True, index=False)
+if not exists(FILE_NAME): # if file don't exist create an empty csv
+    pd.DataFrame(columns=COLUMNS).to_csv(FILE_NAME, header=True, index=False)
 
 # init last collected page as 0, if there is a variable saved then load the variable
 last_collected_page = 0
@@ -36,7 +37,13 @@ while active_page < last_page or loop_count < 10:
         print("Getting data...")
         data = crm_bot.get_doctors_data()
         print("Data collected.\n")
-        pd.DataFrame(data=data, columns=COLUMNS).to_csv("crm_pb_data.csv", header=False, index=False, mode="a")
+
+        for crm in [d[1] for d in data]:
+            if crm in pd.read_csv(FILE_NAME, header=True)["crm"].unique():
+                print("Data already collected.")
+                exit()
+                
+        pd.DataFrame(data=data, columns=COLUMNS).to_csv(FILE_NAME, header=False, index=False, mode="a")
         current_page = active_page
         with open("last_collected_page.pkl", "wb") as f:
             pk.dump(active_page, f) # save last page collected
