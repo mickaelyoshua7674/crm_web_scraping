@@ -66,7 +66,7 @@ class CRM():
             except ValueError:
                 self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
                 pages_list[-3].click()
-        self.random_sleep(5,7)
+            self.random_sleep(3,5)
 
     def get_active_page(self) -> int:
         """Collect the current page"""
