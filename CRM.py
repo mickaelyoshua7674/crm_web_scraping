@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 from typing import List
-import time, random
+import time, random, traceback
 
 class CRM():
     def __init__(self, chromedriver_path: str) -> None:
@@ -66,8 +66,11 @@ class CRM():
             except ValueError:
                 self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
                 pages_list[-3].click()
+            except:
+                print(f"Last page reached: {pages_list.find_element(By.CSS_SELECTOR, '.paginationjs-page.J-paginationjs-page.active').get_attribute('data-num')}")
+                traceback.print_exc()
+                exit()
             self.random_sleep(3,5)
-
     def get_active_page(self) -> int:
         """Collect the current page"""
         self.random_sleep(1,2)
