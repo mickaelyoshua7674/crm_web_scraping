@@ -3,7 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
-from typing import List
+from typing import List, Union
 import time, random, traceback
 
 class CRM():
@@ -17,7 +17,7 @@ class CRM():
         sc = Service(self.CHROMEDRIVER_PATH)
         return webdriver.Chrome(service=sc)#, options=op)
 
-    def random_sleep(self, i: int, f: int) -> None:
+    def random_sleep(self, i: Union[int, float], f: Union[int, float]) -> None:
         """Randomly choose a float number between i-f and sleep during that random time"""
         time.sleep(random.uniform(i, f))
 
@@ -56,8 +56,12 @@ class CRM():
     def go_to_page(self, page: int) -> None:
         """Go to given page"""
         while True:
+            print(f"Page: {self.get_active_page()}")
             self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
+            self.random_sleep(.1,1)
             pages_list = [li for li in self.driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")]
+            self.random_sleep(.1,1)
+            
             self.random_sleep(1,2)
             try:
                 self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
@@ -70,7 +74,8 @@ class CRM():
                 print(f"Last page reached: {pages_list.find_element(By.CSS_SELECTOR, '.paginationjs-page.J-paginationjs-page.active').get_attribute('data-num')}")
                 traceback.print_exc()
                 exit()
-            self.random_sleep(3,5)
+            self.random_sleep(2,3)
+
     def get_active_page(self) -> int:
         """Collect the current page"""
         self.random_sleep(1,2)

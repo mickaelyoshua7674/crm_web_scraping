@@ -22,7 +22,6 @@ crm_bot.random_sleep(3,5)
 crm_bot.fill_form()
 
 last_page = crm_bot.get_last_page()
-# get last page
 if 0 < last_collected_page < last_page:
     print("Going to last collected page...")
     crm_bot.go_to_page(last_collected_page+1)
@@ -31,7 +30,6 @@ active_page = crm_bot.get_active_page()
 current_page = 0
 loop_count = 0
 while active_page < last_page or loop_count < 10:
-    print(f"Page {active_page}")
     
     if active_page != current_page: # after clicking to next page, if it is now a different page, then collect data
         print("Getting data...")
