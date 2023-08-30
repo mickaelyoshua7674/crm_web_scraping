@@ -21,18 +21,25 @@ class CRM():
         """Randomly choose a float number between i-f and sleep during that random time"""
         time.sleep(random.uniform(i, f))
 
-    def fill_form(self) -> None:
+    def _fill_field(self, id: str, value: str) -> None:
+        self.driver.find_element(By.ID, id).click()
+        self.random_sleep(1,2)
+        Select(self.driver.find_element(By.ID, id)).select_by_visible_text(value)
+        print(f"{value} selected.")
+        self.random_sleep(1,2)
+        self.driver.find_element(By.TAG_NAME, "body").click()
+        self.random_sleep(1,2)
+
+    def fill_form(self, uf: str, mun: str, espec: str="Todas") -> None:
         """Fill UF as PB and show search"""
         # SELECT UF -> PB / SHOW DATA
         self.driver.execute_script("arguments[0].scrollIntoView(true);", self.driver.find_element(By.CSS_SELECTOR, ".form.panel"))
         self.random_sleep(1,2)
-        self.driver.find_element(By.ID, "uf").click()
-        self.random_sleep(1,2)
-        Select(self.driver.find_element(By.ID, "uf")).select_by_value("PB")
-        print("UF PB selected.")
-        self.random_sleep(1,2)
-        self.driver.find_element(By.TAG_NAME, "body").click()
-        self.random_sleep(1,2)
+
+        self._fill_field("uf", uf)
+        self._fill_field("municipio", mun)
+        self._fill_field("especialidade", espec)
+
         self.driver.find_element(By.CSS_SELECTOR, ".w-100.btn-buscar.btnPesquisar").click()
         self.random_sleep(5,7)
         self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
