@@ -27,12 +27,12 @@ if 0 < last_collected_page < last_page:
     crm_bot.go_to_page(last_collected_page+1)
 
 active_page = crm_bot.get_active_page()
-current_page = 0
-loop_count = 0
+current_page = loop_count = 0
 while active_page < last_page or loop_count < 10:
     
     if active_page != current_page: # after clicking to next page, if it is now a different page, then collect data
         print("Getting data...")
+        crm_bot.random_sleep(1,2)
         data = crm_bot.get_doctors_data()
         print("Data collected.\n")
 

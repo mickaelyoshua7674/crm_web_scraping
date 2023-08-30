@@ -43,8 +43,7 @@ class CRM():
 
     def get_doctors_data(self) -> List[List[str]]:
         """Get the data from the given div object"""
-        divs_med = [d for d in self.driver.find_element(By.CSS_SELECTOR, ".busca-resultado").find_elements(By.TAG_NAME, "div")
-                        if "resultado-item resultMedico_" in d.get_attribute("class")] # get all doctor blocks
+        divs_med = [d for d in self.driver.find_element(By.CSS_SELECTOR, ".busca-resultado").find_elements(By.TAG_NAME, "div")] # get all doctor blocks
         self.random_sleep(1,3)
         return [[div.find_element(By.TAG_NAME, "h4").text,
                 *[t.text.split(" ")[-1] for t in div.find_elements(By.CSS_SELECTOR, ".col-md-4")],
@@ -62,7 +61,6 @@ class CRM():
             pages_list = [li for li in self.driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")]
             self.random_sleep(.1,1)
             
-            self.random_sleep(1,2)
             try:
                 self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
                 pages_list[[li.get_attribute("data-num") for li in pages_list].index(str(page))].click()
@@ -74,7 +72,7 @@ class CRM():
                 print(f"Last page reached: {pages_list.find_element(By.CSS_SELECTOR, '.paginationjs-page.J-paginationjs-page.active').get_attribute('data-num')}")
                 traceback.print_exc()
                 exit()
-            self.random_sleep(2,3)
+            self.random_sleep(1.3,2)
 
     def get_active_page(self) -> int:
         """Collect the current page"""
