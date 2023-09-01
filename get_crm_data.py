@@ -5,7 +5,6 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from time import sleep
 import os
 
-
 FILE_NAME = "crm_pb_data.csv"
 LAST_PAGE_NAME = "last_collected_page.pkl"
 LAST_ESPEC_NAMNE = "last_collected_espec.pkl"
@@ -37,37 +36,37 @@ def main():
     crm_bot.random_sleep(1,2)
     
     try:
-        for e in espec[espec.index(last_collected_espec)+1:]:
+        for e in espec[espec.index(last_collected_espec)+1:]: # split the list by index eliminating all previous collected espec
             crm_bot.fill_form(uf="PB", mun="João Pessoa", espec=e)
             crm_bot.random_sleep(5,6)
 
-            last_page = crm_bot.get_last_page()
-            if 0 < last_collected_page < last_page:
-                print("Going to last collected page...")
-                crm_bot.go_to_page(last_collected_page+1)
+            if crm_bot.get_result_text() != "Nenhum resultado encontrado": # check if there is result in search
+                last_page = crm_bot.get_last_page()
+                if 0 < last_collected_page < last_page: # go to last collected page
+                    print("Going to last collected page...")
+                    crm_bot.go_to_page(last_collected_page+1)
 
-            active_page = crm_bot.get_active_page()
-            if active_page == last_page:
-                crm_bot.concat_data(FILE_NAME, COLUMNS)
-            else:
-                while True:
+                active_page = crm_bot.get_active_page()
+                if active_page == last_page: # there is only one page
                     crm_bot.concat_data(FILE_NAME, COLUMNS)
-                    with open(LAST_PAGE_NAME, "wb") as f:
-                        pk.dump(active_page, f) # save last page collected
+                else:
+                    while True:
+                        crm_bot.concat_data(FILE_NAME, COLUMNS)
+                        with open(LAST_PAGE_NAME, "wb") as f:
+                            pk.dump(active_page, f) # save last page collected
 
-                    active_page = crm_bot.get_active_page()
-                    if active_page >= last_page:
-                        break
-                    crm_bot.go_to_page(active_page+1)
-
+                        active_page = crm_bot.get_active_page()
+                        if active_page >= last_page:
+                            break
+                        crm_bot.go_to_page(active_page+1)
             with open(LAST_ESPEC_NAMNE, "wb") as f:
-                pk.dump(e, f)
+                pk.dump(e, f) # save last espec
             if os.path.exists(LAST_PAGE_NAME):
-                os.remove(LAST_PAGE_NAME)
+                os.remove(LAST_PAGE_NAME) # delete last page
 
         crm_bot.driver.quit()
 
-    except UnexpectedAlertPresentException:
+    except UnexpectedAlertPresentException: # recursion for UnexpectedAlertPresentException error
         print("UnexpectedAlertPresentException!\nSleeping for 30min...")
         crm_bot.driver.quit()
         sleep(30*60)

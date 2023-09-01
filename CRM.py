@@ -117,3 +117,8 @@ class CRM():
                 exit()
                 
         pd.DataFrame(data=data, columns=columns).to_csv(file_name, header=False, index=False, mode="a")
+
+    def get_result_text(self) -> str:
+        print(self.driver.find_element(By.CSS_SELECTOR, ".resultado-item").text)
+        exit()
+        return self.driver.find_element(By.CSS_SELECTOR, ".resultado-item").text
