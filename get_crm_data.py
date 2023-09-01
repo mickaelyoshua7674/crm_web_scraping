@@ -68,8 +68,10 @@ def main():
         crm_bot.driver.quit()
 
     except UnexpectedAlertPresentException:
+        print("UnexpectedAlertPresentException!\nSleeping for 30min...")
         crm_bot.driver.quit()
         sleep(30*60)
+        print("Go again!\n\n")
         main()
 
 main()
