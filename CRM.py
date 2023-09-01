@@ -63,15 +63,18 @@ class CRM():
 
     def get_doctors_data(self) -> List[List[str]]:
         """Get the data from the given div object"""
-        divs_med = [d for d in self.driver.find_element(By.CSS_SELECTOR, ".busca-resultado").find_elements(By.TAG_NAME, "div")] # get all doctor blocks
-        print([div.find_element(By.CLASS_NAME, "card-body").text for div in divs_med])
-        return [[div.find_element(By.TAG_NAME, "h4").text,
-                *[t.text.split(" ")[-1] for t in div.find_elements(By.CSS_SELECTOR, ".col-md-4")],
-                div.find_element(By.CSS_SELECTOR, ".col-md").text.split(" ")[-1],
-                div.find_element(By.CSS_SELECTOR, ".row.endereco").find_element(By.TAG_NAME, "div").text,
-                div.find_element(By.CSS_SELECTOR, ".row.telefone").find_element(By.TAG_NAME, "div").text]
-                for div in divs_med]
-
+        # divs_med = [d for d in self.driver.find_element(By.CSS_SELECTOR, ".busca-resultado").find_elements(By.CLASS_NAME, "resultado-item")] # get all doctor blocks
+        texts = [div.text.splitlines() for div in self.driver.find_element(By.CSS_SELECTOR, ".busca-resultado").find_elements(By.CLASS_NAME, "resultado-item")]
+        return [[text[0],
+                 text[1],
+                 text[2].split(": ")[-1],
+                 text[3].split(": ")[-1],
+                 text[4].split(": ")[-1],
+                 text[5].split(": ")[-1],
+                 " / ".join(text[text.index('Especialidades/Áreas de Atuação:')+1:-2]),
+                 text[-2].split(": ")[-1],
+                 text[-1].split(": ")[-1]] for text in texts]
+    
     def go_to_page(self, page: int) -> None:
         """Go to given page"""
         while True:

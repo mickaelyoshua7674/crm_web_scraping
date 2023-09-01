@@ -7,7 +7,7 @@ import os
 FILE_NAME = "crm_pb_data.csv"
 LAST_PAGE_NAME = "last_collected_page.pkl"
 LAST_ESPEC_NAMNE = "last_collected_espec.pkl"
-COLUMNS = ["nome", "crm", "data_inscricao", "prim_inscricao", "inscricao", "situacao", "endereco", "telefone"]
+COLUMNS = ["nome", "crm", "data_inscricao", "prim_inscricao", "inscricao", "situacao", "especialidades", "endereco", "telefone"]
 CHROMEDRIVER_PATH = "chromedriver.exe"
 
 if not os.path.exists(FILE_NAME): # if file don't exist create an empty csv
@@ -50,7 +50,7 @@ for e in espec[espec.index(last_collected_espec)+1:]:
     else:
         while active_page < last_page:
             crm_bot.concat_data(FILE_NAME, COLUMNS)
-            
+
             with open(LAST_PAGE_NAME, "wb") as f:
                 pk.dump(active_page, f) # save last page collected
 
@@ -61,4 +61,5 @@ for e in espec[espec.index(last_collected_espec)+1:]:
         pk.dump(e, f)
     if os.path.exists(LAST_PAGE_NAME):
         os.remove(LAST_PAGE_NAME)
+    break
 crm_bot.driver.quit()
