@@ -29,7 +29,7 @@ class CRM():
         self.random_sleep(1,2)
         return [e.text for e in elem.find_elements(By.TAG_NAME, "option")]
 
-    def fill_field(self, id: str, value: str) -> None:
+    def __fill_field(self, id: str, value: str) -> None:
         """
         Find the field element and click it
         Select the desired value
@@ -38,7 +38,7 @@ class CRM():
         self.driver.find_element(By.ID, id).click()
         self.random_sleep(1,2)
         Select(self.driver.find_element(By.ID, id)).select_by_visible_text(value)
-        print(f"{value} selected.")
+        print(f"{value} selected.\n")
         self.random_sleep(1,2)
         self.driver.find_element(By.TAG_NAME, "body").click()
         self.random_sleep(1,2)
@@ -49,9 +49,9 @@ class CRM():
         self.driver.execute_script("arguments[0].scrollIntoView(true);", self.driver.find_element(By.CSS_SELECTOR, ".form.panel"))
         self.random_sleep(1,2)
 
-        self.fill_field("uf", uf)
-        self.fill_field("municipio", "João Pessoa")
-        self.fill_field("especialidade", espec)
+        self.__fill_field("uf", uf)
+        self.__fill_field("municipio", mun)
+        self.__fill_field("especialidade", espec)
 
         self.driver.find_element(By.CSS_SELECTOR, ".w-100.btn-buscar.btnPesquisar").click()
         self.random_sleep(5,7)
@@ -78,7 +78,7 @@ class CRM():
     def go_to_page(self, page: int) -> None:
         """Go to given page"""
         while True:
-            print(f"Page: {self.get_active_page()}")
+            print(f"Page: {page}")
             self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
             self.random_sleep(.1,1)
             pages_list = [li for li in self.driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")]
