@@ -66,7 +66,7 @@ class CRM():
         # divs_med = [d for d in self.driver.find_element(By.CSS_SELECTOR, ".busca-resultado").find_elements(By.CLASS_NAME, "resultado-item")] # get all doctor blocks
         texts = [div.text.splitlines() for div in self.driver.find_element(By.CSS_SELECTOR, ".busca-resultado").find_elements(By.CLASS_NAME, "resultado-item")]
         return [[text[0],
-                 text[1],
+                 text[1].split(": ")[-1],
                  text[2].split(": ")[-1],
                  text[3].split(": ")[-1],
                  text[4].split(": ")[-1],
@@ -91,10 +91,7 @@ class CRM():
             except ValueError:
                 self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
                 pages_list[-3].click()
-            except:
-                print(f"Last page reached: {pages_list.find_element(By.CSS_SELECTOR, '.paginationjs-page.J-paginationjs-page.active').get_attribute('data-num')}")
-                traceback.print_exc()
-                exit()
+
             print(f"Page: {self.get_active_page()}")
             self.random_sleep(2,4)
 

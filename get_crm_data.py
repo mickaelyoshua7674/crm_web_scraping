@@ -51,7 +51,7 @@ def main():
 
                 active_page = crm_bot.get_active_page()
 
-                if active_page == last_page: # there is only one page
+                if active_page == last_page: # if there is only one page
                     crm_bot.concat_data(FILE_NAME, COLUMNS)
                 else:
                     while True:
@@ -59,10 +59,11 @@ def main():
                         with open(LAST_PAGE_NAME, "wb") as f:
                             pk.dump(active_page, f) # save last page collected
 
-                        active_page = crm_bot.get_active_page()
                         if active_page >= last_page:
                             break
                         crm_bot.go_to_page(active_page+1)
+                        crm_bot.random_sleep(2,4)
+                        active_page = crm_bot.get_active_page()
             else:
                 print("No result.\n")
             with open(LAST_ESPEC_NAMNE, "wb") as f:
