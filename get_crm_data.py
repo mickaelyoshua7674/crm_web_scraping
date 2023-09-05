@@ -69,7 +69,8 @@ def main():
                 pk.dump(e, f) # save last espec
             if os.path.exists(LAST_PAGE_NAME):
                 os.remove(LAST_PAGE_NAME) # delete last page
-            del last_page, active_page, last_collected_page
+            last_collected_page = 0
+            del last_page, active_page
 
         crm_bot.driver.quit()
 
