@@ -78,7 +78,6 @@ class CRM():
     def go_to_page(self, page: int) -> None:
         """Go to given page"""
         while True:
-            print(f"Page: {page}")
             self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
             self.random_sleep(.1,1)
             pages_list = [li for li in self.driver.find_element(By.CSS_SELECTOR, ".paginationjs-pages").find_elements(By.TAG_NAME, "li")]
@@ -87,6 +86,7 @@ class CRM():
             try:
                 self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
                 pages_list[[li.get_attribute("data-num") for li in pages_list].index(str(page))].click()
+                print(f"Next page to collect: {self.get_active_page()}")
                 break
             except ValueError:
                 self.driver.find_element(By.TAG_NAME, "body").send_keys(Keys.END)
@@ -95,7 +95,8 @@ class CRM():
                 print(f"Last page reached: {pages_list.find_element(By.CSS_SELECTOR, '.paginationjs-page.J-paginationjs-page.active').get_attribute('data-num')}")
                 traceback.print_exc()
                 exit()
-            self.random_sleep(1.3,2)
+            print(f"Page: {self.get_active_page()}")
+            self.random_sleep(2,4)
 
     def get_active_page(self) -> int:
         """Collect the current page"""
@@ -104,21 +105,22 @@ class CRM():
                         .find_element(By.CSS_SELECTOR, ".paginationjs-page.J-paginationjs-page.active")\
                         .get_attribute("data-num"))
     
-    def concat_data(self, file_name: str, columns: List[str]):
+    def concat_data(self, file_name: str, columns: List[str]) -> None:
         print("Getting data...")
         self.random_sleep(1,2)
         data = self.get_doctors_data()
         print("Data collected.\n")
 
         collected_crm = pd.read_csv(file_name)["crm"].unique()
-        for crm in [d[1] for d in data]:
+        for line in [d for d in data]:
+            crm = line[1]
             if crm in collected_crm:
-                print("Data already collected.")
-                exit()
+                data.remove(line)
+                print(f"{crm} already collected.\n")
                 
         pd.DataFrame(data=data, columns=columns).to_csv(file_name, header=False, index=False, mode="a")
 
     def get_result_text(self) -> str:
-        print(self.driver.find_element(By.CSS_SELECTOR, ".resultado-item").text)
-        exit()
-        return self.driver.find_element(By.CSS_SELECTOR, ".resultado-item").text
+        if self.driver.find_element(By.CSS_SELECTOR, ".resultado-item").text != "Nenhum resultado encontrado":
+            return True
+        return False
