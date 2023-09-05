@@ -70,7 +70,6 @@ def main():
             if os.path.exists(LAST_PAGE_NAME):
                 os.remove(LAST_PAGE_NAME) # delete last page
             last_collected_page = 0
-            del last_page, active_page
 
         crm_bot.driver.quit()
 
