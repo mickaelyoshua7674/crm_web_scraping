@@ -52,9 +52,11 @@ def main():
                 active_page = crm_bot.get_active_page()
 
                 if active_page == last_page: # if there is only one page
+                    crm_bot.print_time()
                     crm_bot.concat_data(FILE_NAME, COLUMNS)
                 else:
                     while True:
+                        crm_bot.print_time()
                         crm_bot.concat_data(FILE_NAME, COLUMNS)
                         with open(LAST_PAGE_NAME, "wb") as f:
                             pk.dump(active_page, f) # save last page collected

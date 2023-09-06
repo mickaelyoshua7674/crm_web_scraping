@@ -4,13 +4,22 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 from typing import List, Union
-import time, random, traceback
+import time, random
+from datetime import datetime
 import pandas as pd
 
 class CRM():
     def __init__(self, chromedriver_path: str) -> None:
         self.CHROMEDRIVER_PATH = chromedriver_path
         self.driver = self.init_driver()
+
+    def print_time(self) -> None:
+        now = datetime.now()
+        hour = str(now.hour) if now.hour > 9 else "0"+str(now.hour)
+        minute = str(now.minute) if now.minute > 9 else "0"+str(now.minute)
+        second = str(now.second) if now.second > 9 else "0"+str(now.second)
+
+        print(f"{hour}:{minute}:{second}")
 
     def init_driver(self):
         op = webdriver.ChromeOptions()
