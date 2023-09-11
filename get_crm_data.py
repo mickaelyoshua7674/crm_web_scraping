@@ -77,7 +77,7 @@ def main():
         crm_bot.driver.quit()
 
     except UnexpectedAlertPresentException: # recursion for UnexpectedAlertPresentException error
-        min_to_wait = 40
+        min_to_wait = 50
         print(f"\nUnexpectedAlertPresentException!\nSleeping for {min_to_wait}min...")
         crm_bot.driver.quit()
         sleep(min_to_wait*60)
