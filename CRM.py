@@ -52,7 +52,7 @@ class CRM():
         self.driver.find_element(By.TAG_NAME, "body").click()
         self.random_sleep(1,2)
 
-    def fill_form(self, uf: str, mun: str="Todos", espec: str="Todas") -> None:
+    def fill_form(self, uf: str="PB", mun: str="Todos", espec: str="Todas") -> None:
         """Fill UF as PB and show search"""
         # SELECT UF -> PB / SHOW DATA
         self.driver.execute_script("arguments[0].scrollIntoView(true);", self.driver.find_element(By.CSS_SELECTOR, ".form.panel"))
