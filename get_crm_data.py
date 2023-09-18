@@ -44,7 +44,7 @@ def main():
             last_page = crm_bot.get_last_page()
 
             if 0 < last_collected_page < last_page: # go to last collected page
-                print("Going to last collected page...")
+                print(f"Going to last collected page ({last_page})...")
                 crm_bot.go_to_page(last_collected_page+1)
             
             crm_bot.random_sleep(2,4)
